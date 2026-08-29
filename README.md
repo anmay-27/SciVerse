@@ -64,7 +64,7 @@ You can also serve the directory with any basic static HTTP server. Start at `in
 This repository is ready to deploy as a GitHub Pages project site such as:
 
 ```text
-https://USERNAME.github.io/SciVerse/
+https://anmay-27.github.io/SciVerse/index.html
 ```
 
 1. Push the project to a GitHub repository named `SciVerse`.
