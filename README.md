@@ -557,19 +557,8 @@ The objective is to help students understand scientific concepts by interacting 
 # Contributors
 
 ### Anmay Rai
-**Enrollment No.: 0801IT231027**
-
 ### Bhavika Lohia
-**Enrollment No.: 0801IT231041**
-
 ---
-
-# Academic Information
-
-**Project:** Session Assignment – I  
-**Subject:** CGMM  
-**Category:** Interactive Educational Multimedia Application  
-**Submitted To:** Dr. Puja Gupta
 
 ---
 
