@@ -149,7 +149,7 @@ The visualization helps demonstrate:
 
 # Chemistry Laboratory
 
-The Chemistry section contains six interactive learning modules.
+The Chemistry section contains seven interactive learning modules.
 
 ## 1. Build an Atom
 
@@ -174,7 +174,7 @@ The visualization also displays the nucleus and electron shells.
 
 ## 2. Interactive Periodic Table
 
-Explore the first **36 elements of the periodic table** interactively.
+Explore **all 118 elements of the periodic table** interactively.
 
 Users can search and inspect elements using:
 
@@ -199,7 +199,7 @@ Different categories of elements can also be explored using filters.
 
 Visualize common molecules and understand their molecular structures.
 
-Included molecules include:
+There are 25 rotatable molecular models. The original choices include:
 
 - H₂O
 - CO₂
@@ -263,7 +263,7 @@ The simulation demonstrates how these factors influence:
 
 An interactive visualization of a reversible reaction:
 
-**A + B ⇌ C + D**
+**A ⇌ B** (a qualitative teaching model)
 
 The module demonstrates:
 
@@ -274,6 +274,12 @@ The module demonstrates:
 - Le Chatelier's Principle
 
 Users can disturb the equilibrium and observe how the system responds.
+
+---
+
+## 7. Observable Chemical Reactions
+
+Explore ten animated reaction demonstrations with playback, progress scrubbing, equations, narration and quizzes. Reaction Rates and Chemical Equilibrium also each include ten named teaching examples.
 
 ---
 
@@ -360,6 +366,7 @@ SciVerse/
 ├── js/
 │   ├── common.js
 │   ├── home.js
+│   ├── lab-visuals.js
 │   │
 │   ├── physics/
 │   │   ├── projectile.js
@@ -371,7 +378,11 @@ SciVerse/
 │   └── chemistry/
 │       ├── atom-builder.js
 │       ├── periodic-table.js
+│       ├── periodic-data.js
 │       ├── molecule.js
+│       ├── molecule-data.js
+│       ├── reaction-examples.js
+│       ├── reaction-visuals.js
 │       ├── ph-lab.js
 │       ├── reaction-rate.js
 │       └── equilibrium.js
@@ -390,6 +401,7 @@ SciVerse/
 │       ├── molecule.html
 │       ├── ph-lab.html
 │       ├── reaction-rate.html
+│       ├── reaction-visuals.html
 │       └── equilibrium.html
 │
 └── assets/
@@ -575,3 +587,51 @@ https://anmay-27.github.io/SciVerse/index.html
 ## SciVerse
 
 **Explore. Experiment. Understand.**
+
+---
+
+## Enhanced laboratory visuals
+
+The existing lessons, navigation, narration, quizzes and challenges remain in place. No installation, CDN, backend or build step was added.
+
+- **Molecular Geometry:** perspective projection of 3D atom coordinates, shaded spheres and bonds, drag/touch/keyboard rotation, optional auto rotation, geometry and bond-angle annotations. All five original molecules remain available alongside 20 additional models. This is a Canvas renderer, not Three.js/WebGL.
+- **Build an Atom:** layered nucleus, elliptical animated shells, particle colors and live isotope/ion feedback. Shell paths are a teaching model rather than literal electron trajectories.
+- **Projectile Motion:** predicted trajectory, glowing trail, perspective ground, target marker, landing pulse, velocity vectors and enhanced-mode toggle. Linear air resistance now affects both trajectory and reported measurements consistently.
+- **Waves:** labeled component/resultant traces, custom phase, standing-wave nodes and antinodes, optional perspective ripple tank. Speed, wavelength and frequency are linked.
+- **Pendulum, optics and fields:** shaded bob and energy bars; propagating light, lens/image/focus labels and total internal reflection; traced electric field lines, potential overlay and positive test-particle probes.
+- **Chemistry:** indicator beaker and color scale, category-colored element cards with atom previews, collision flashes and product formation, reversible particle transformations and a live rate-history graph. The equilibrium lesson explicitly uses a simplified A ⇌ B model.
+- **Observable reactions:** new `concepts/chemistry/reaction-visuals.html` page linked from the Chemistry laboratory, with ten selectable demonstrations, playback, pause, reset, a progress scrubber, reaction-specific narration and safety explanations, a challenge and quizzes.
+
+Shared rendering helpers live in `js/lab-visuals.js`; the reaction gallery logic is in `js/chemistry/reaction-visuals.js`. Animation loops stop scheduling while the document is hidden. Reduced-motion preferences disable automatic molecule/atom rotation and wave playback, remove decorative optical motion and reduce the update frequency of explicitly played simulations.
+
+### Verification and manual demonstration
+
+The upgrade was checked in headless Chrome at desktop and phone widths: all 12 lessons loaded without JavaScript exceptions, and quizzes, theme controls and resets remained connected. Interactive checks covered all five molecules, the original four reaction scenes, projectile launch/pause/drag, wave controls, total internal reflection, atom/ion outputs, periodic-table filters, pH classification, product formation and equilibrium disturbances. JavaScript syntax and local resource paths were checked separately.
+
+For the classroom demonstration, manually check:
+
+1. Open Chemistry → Observable Chemical Reactions. Play all ten examples; look for brown fumes above the blue copper solution, a settling yellow solid, pink fading to colorless, and rising CO₂ bubbles. Pause, scrub and reset each one.
+2. Rotate each molecule using mouse/touch and arrow keys. Toggle auto rotation. Check geometry, angles and polarity.
+3. Launch projectiles with and without drag; try a target hit and enhanced-mode toggle. Try standing waves, surface ripples and field probes.
+4. Test light/dark themes, phone/tablet layouts, keyboard navigation and the operating system's reduced-motion setting.
+5. Use Explain aloud and Stop narration with your actual browser and speakers; headless checks cannot confirm audible output or installed voices.
+
+## Expanded reaction collections
+
+Each reaction module now includes at least ten named examples. Observable Chemical Reactions has ten animated demonstrations, including silver chloride, copper hydroxide and iron hydroxide precipitates, limewater clouding, peroxide decomposition and copper deposition alongside the original four. Reaction Rates and Chemical Equilibrium each have ten selectable teaching examples, equations, explanations, narration and illustrative presets. Free exploration preserves their original models.
+
+The new shared collection and picker are in `js/chemistry/reaction-examples.js`. These presets are qualitative teaching aids, not numerical models of the named reactions. Equilibrium examples distinguish exothermic and endothermic forward directions; the temperature response changes accordingly.
+
+Chemistry references: [Purdue metal displacement demonstrations](https://chemed.chem.purdue.edu/genchem/demosheets/9.11.html) for copper coating on iron, and [LibreTexts equilibrium experiments](https://chem.libretexts.org/Courses/Los_Medanos_College/Chemistry_6_and_Chemistry_7_Combined_Laboratory_Manual_%28Los_Medanos_College%29/01%3A_Experiments/1.16%3A_Experiment_616_Shifting_Equilibrium_1_1_3) for the cobalt complex equilibrium.
+
+Expansion validation: 215 browser assertions passed across all 30 named samples at 1280px and 320px, including visible before/after changes, example narration calls, free-exploration restoration, reset, quizzes, resource paths, and the temperature-response direction for all ten equilibrium examples.
+
+## Complete periodic table and 25 molecular models
+
+Molecular Geometry now contains 25 choices: the original H₂O, CO₂, CH₄, NH₃ and BF₃, plus H₂, O₂, N₂, HCl, HF, HCN, BeCl₂, BCl₃, SiH₄, CCl₄, CH₃Cl, NF₃, OF₂, SO₂, SO₃, PCl₅, SF₄, SF₆, XeF₂ and XeF₄. Single, double and triple bonds use explicit bond connections. Two-atom molecules correctly show no bond angle; all trigonal-planar choices are accepted by the existing challenge. Some shapes are idealized, and expanded-valence hybridization labels are identified as traditional classroom descriptions.
+
+The periodic table includes all 118 elements, with detached lanthanide and actinide rows, category filters and exact symbol/atomic-number search. Ag and Au have complete detail cards. Neutral-atom shell previews now use every electron from the configuration instead of truncating at 20.
+
+Data remains local: `js/chemistry/molecule-data.js` and `js/chemistry/periodic-data.js` require no network at runtime. Element properties were retrieved from [PubChem’s public periodic-table dataset](https://pubchem.ncbi.nlm.nih.gov/rest/pug/periodictable/JSON) on 2026-09-08. Lawrencium’s configuration follows [NIST](https://physics.nist.gov/cgi-bin/Elements/elInfo.pl?element=103). Source qualifiers for predicted configurations are retained; isotope-specific mass values are not presented as standard atomic weights. Molecular teaching conventions follow [OpenStax’s molecular structure discussion](https://openstax.org/books/chemistry-2e/pages/7-6-molecular-structure-and-polarity).
+
+Collection validation: all 25 molecule options and all 118 element detail cards were exercised in Chrome at 1280px and 320px. 176 assertions covered geometry outputs, keyboard rotation, diatomic angle handling, Au/Ag search, both detached series, filters, reset, quizzes, reduced motion and local paths. All 118 neutral electron totals and unique table positions were also checked.

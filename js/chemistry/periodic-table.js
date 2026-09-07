@@ -1,1 +1,73 @@
-(()=>{"use strict";const $=id=>document.getElementById(id),raw=[["H","Hydrogen",1,1,1,1.008,"nonmetal","1s¹"],["He","Helium",1,18,4.003,"noble gas","1s²"],["Li","Lithium",2,1,6.94,"alkali metal","[He] 2s¹"],["Be","Beryllium",2,2,9.012,"alkaline earth metal","[He] 2s²"],["B","Boron",2,13,10.81,"metalloid","[He] 2s² 2p¹"],["C","Carbon",2,14,12.011,"nonmetal","[He] 2s² 2p²"],["N","Nitrogen",2,15,14.007,"nonmetal","[He] 2s² 2p³"],["O","Oxygen",2,16,15.999,"nonmetal","[He] 2s² 2p⁴"],["F","Fluorine",2,17,18.998,"halogen","[He] 2s² 2p⁵"],["Ne","Neon",2,18,20.18,"noble gas","[He] 2s² 2p⁶"],["Na","Sodium",3,1,22.99,"alkali metal","[Ne] 3s¹"],["Mg","Magnesium",3,2,24.305,"alkaline earth metal","[Ne] 3s²"],["Al","Aluminium",3,13,26.982,"metal","[Ne] 3s² 3p¹"],["Si","Silicon",3,14,28.085,"metalloid","[Ne] 3s² 3p²"],["P","Phosphorus",3,15,30.974,"nonmetal","[Ne] 3s² 3p³"],["S","Sulfur",3,16,32.06,"nonmetal","[Ne] 3s² 3p⁴"],["Cl","Chlorine",3,17,35.45,"halogen","[Ne] 3s² 3p⁵"],["Ar","Argon",3,18,39.948,"noble gas","[Ne] 3s² 3p⁶"],["K","Potassium",4,1,39.098,"alkali metal","[Ar] 4s¹"],["Ca","Calcium",4,2,40.078,"alkaline earth metal","[Ar] 4s²"],["Sc","Scandium",4,3,44.956,"metal","[Ar] 3d¹ 4s²"],["Ti","Titanium",4,4,47.867,"metal","[Ar] 3d² 4s²"],["V","Vanadium",4,5,50.942,"metal","[Ar] 3d³ 4s²"],["Cr","Chromium",4,6,51.996,"metal","[Ar] 3d⁵ 4s¹"],["Mn","Manganese",4,7,54.938,"metal","[Ar] 3d⁵ 4s²"],["Fe","Iron",4,8,55.845,"metal","[Ar] 3d⁶ 4s²"],["Co","Cobalt",4,9,58.933,"metal","[Ar] 3d⁷ 4s²"],["Ni","Nickel",4,10,58.693,"metal","[Ar] 3d⁸ 4s²"],["Cu","Copper",4,11,63.546,"metal","[Ar] 3d¹⁰ 4s¹"],["Zn","Zinc",4,12,65.38,"metal","[Ar] 3d¹⁰ 4s²"],["Ga","Gallium",4,13,69.723,"metal","[Ar] 3d¹⁰ 4s² 4p¹"],["Ge","Germanium",4,14,72.63,"metalloid","[Ar] 3d¹⁰ 4s² 4p²"],["As","Arsenic",4,15,74.922,"metalloid","[Ar] 3d¹⁰ 4s² 4p³"],["Se","Selenium",4,16,78.971,"nonmetal","[Ar] 3d¹⁰ 4s² 4p⁴"],["Br","Bromine",4,17,79.904,"halogen","[Ar] 3d¹⁰ 4s² 4p⁵"],["Kr","Krypton",4,18,83.798,"noble gas","[Ar] 3d¹⁰ 4s² 4p⁶"]];let selected=null;const data=raw.map((e,i)=>({symbol:e[0],name:e[1],number:i+1,period:e[2],group:e[3],mass:e[4],category:e[5],config:e[6]}));function build(){const table=$("periodicTable");data.forEach(e=>{const b=document.createElement("button");b.className="element-tile";b.style.gridColumn=e.group;b.style.gridRow=e.period;b.innerHTML=`<span>${e.number}</span><strong>${e.symbol}</strong>`;b.onclick=()=>select(e,b);b.dataset.category=e.category;b.dataset.search=(e.name+" "+e.symbol+" "+e.number).toLowerCase();table.append(b)});filter()}function select(e,b){selected=e;document.querySelectorAll(".element-tile").forEach(x=>x.classList.remove("is-active"));b.classList.add("is-active");$("elementDetail").innerHTML=`<h3>${e.name} (${e.symbol})</h3><p>Atomic number: <strong>${e.number}</strong> · Mass: <strong>${e.mass}</strong></p><p>Category: ${e.category} · Period ${e.period} · Group ${e.group}</p><p>Electron configuration: <code>${e.config}</code></p>`;$("selectedOut").textContent=e.symbol;$("categoryOut").textContent=e.category}function filter(){const q=$("search").value.toLowerCase(),f=$("filter").value;let n=0;document.querySelectorAll(".element-tile").forEach(b=>{const cat=b.dataset.category,metal=cat.includes("metal")&&!cat.includes("nonmetal")&&!cat.includes("metalloid"),show=b.dataset.search.includes(q)&&(f==="all"||(f==="metal"?metal:cat===f));b.hidden=!show;if(show)n++});$("visibleOut").textContent=n}$("search").oninput=filter;$("filter").onchange=filter;$("reset").onclick=()=>{$("search").value="";$("filter").value="all";filter()};$("checkChallenge").onclick=()=>{const ok=selected?.symbol==="Ar",f=$("challengeFeedback");f.textContent=ok?"Correct—argon is the period 3 noble gas.":"Find group 18 in period 3.";f.className="challenge__feedback "+(ok?"is-success":"is-error")};build()})();
+/* Complete 118-element table with an offline, source-backed data collection. */
+(() => {
+  'use strict';
+  const $=id=>document.getElementById(id),data=PeriodicElements;
+  const colors={'nonmetal':'#60a5fa','noble gas':'#c084fc','alkali metal':'#fb7185','alkaline earth metal':'#fbbf24','metalloid':'#22d3ee','halogen':'#34d399','transition metal':'#fda4af','post-transition metal':'#fdba74','lanthanide':'#a5b4fc','actinide':'#f0abfc'};
+  const aliases={Al:'aluminium aluminum',Cs:'caesium cesium',S:'sulfur sulphur',W:'tungsten wolfram'};
+  let selected=null,previewObserver;
+  const table=$('periodicTable'),tiles=[];
+  const status=document.createElement('p');status.id='filterStatus';status.className='lab-note';status.setAttribute('aria-live','polite');table.parentElement.after(status);
+  const filterControl=$('filter');filterControl.replaceChildren(new Option('All elements','all'),new Option('All metals','metal'));
+  Object.keys(colors).forEach(category=>filterControl.add(new Option(category==='noble gas'?'Noble gases':category[0].toUpperCase()+category.slice(1)+'s',category)));
+  // Standard 18-column layout with detached lanthanide/actinide series.
+  for(let group=1;group<=18;group++){const h=document.createElement('span');h.className='periodic-group-label';h.style.gridColumn=group;h.style.gridRow=1;h.textContent=group;table.append(h);}
+  for(const [row,text] of [[10,'Lanthanides'],[11,'Actinides']]){const h=document.createElement('span');h.className='periodic-series-label';h.style.gridColumn='1 / span 2';h.style.gridRow=row;h.textContent=text;table.append(h);}
+  for(const [row,text] of [[7,'57–71'],[8,'89–103']]){const h=document.createElement('span');h.className='periodic-series-link';h.style.gridColumn=3;h.style.gridRow=row;h.textContent=text;h.title='Series displayed in the detached rows below';table.append(h);}
+  data.forEach(e=>{
+    const b=document.createElement('button');b.type='button';b.className='element-tile';b.style.gridColumn=e.column;b.style.gridRow=e.row;b.style.setProperty('--element-color',colors[e.category]);
+    b.dataset.number=e.number;b.dataset.symbol=e.symbol;b.dataset.category=e.category;
+    b.setAttribute('aria-label',e.name+', '+e.symbol+', atomic number '+e.number);b.setAttribute('aria-pressed','false');
+    const n=document.createElement('span'),symbol=document.createElement('strong');n.textContent=e.number;symbol.textContent=e.symbol;b.append(n,symbol);b.onclick=()=>select(e,b);
+    table.append(b);tiles.push(b);
+  });
+  table.parentElement.tabIndex=0;table.parentElement.setAttribute('aria-label','Periodic table. Scroll horizontally on smaller screens. Select an element for details.');
+  function drawAtom(c,e){
+    const x=Lab.fit(c);if(!x)return;const w=c.clientWidth,h=c.clientHeight,cx=w/2,cy=h*.47,r=Math.min(w*.40,h*.34);
+    Lab.scene(x,w,h,e.symbol+' / '+e.number+' ELECTRONS');
+    e.shells.forEach((count,i)=>{
+      const radius=e.shells.length===1?r*.8:26+(r-26)*i/(e.shells.length-1);
+      x.strokeStyle='#5eead466';x.beginPath();x.arc(cx,cy,radius,0,Math.PI*2);x.stroke();
+      for(let j=0;j<count;j++){const a=j*Math.PI*2/count+i*.4;Lab.ball(x,cx+Math.cos(a)*radius,cy+Math.sin(a)*radius,2,'#34d399');}
+    });
+    Lab.ball(x,cx,cy,17,colors[e.category]);x.save();x.fillStyle='#07111e';x.font='bold 13px system-ui';x.textAlign='center';x.fillText(e.symbol,cx,cy+4);x.restore();
+    Lab.label(x,'Shells: '+e.shells.join(' · '),10,h-14);
+  }
+  function text(tag,content,className){const n=document.createElement(tag);n.textContent=content;if(className)n.className=className;return n;}
+  function select(e,b){
+    selected=e;tiles.forEach(t=>{t.classList.toggle('is-active',t===b);t.setAttribute('aria-pressed',String(t===b));});
+    previewObserver?.disconnect();
+    const detail=$('elementDetail');detail.replaceChildren();
+    const preview=document.createElement('canvas');preview.className='element-atom-preview';preview.setAttribute('aria-label',e.name+' neutral atom: '+e.number+' electrons; shell populations '+e.shells.join(', '));
+    detail.append(preview,text('div',e.symbol,'element-badge'),text('h3',e.name+' ('+e.symbol+')'));
+    detail.append(text('p','Atomic number: '+e.number+' · Atomic mass: '+e.mass+' u'));
+    detail.append(text('p','Category: '+e.category+' · Period '+e.period+' · '+(e.group?'Group '+e.group:'Detached '+e.category+' series')));
+    const config=text('p','Electron configuration: '),sup='⁰¹²³⁴⁵⁶⁷⁸⁹';
+    const display=e.config.replace(/(\d[spdfg])(\d+)/g,(_,orbital,count)=>orbital+[...count].map(d=>sup[+d]).join('')).replace(/\](?=\d)/,'] ');
+    config.append(text('code',display));detail.append(config,text('p','Shell populations: '+e.shells.join(' · ')));
+    detail.append(text('p','Electronegativity (Pauling): '+(e.electronegativity||'Not available')));
+    const source=text('p','Data: '),a=document.createElement('a');a.href='https://pubchem.ncbi.nlm.nih.gov/periodic-table/';a.textContent='PubChem';source.append(a);
+    if(e.configSource==='NIST'){source.append(document.createTextNode(' · Configuration: '));const nist=document.createElement('a');nist.href='https://physics.nist.gov/cgi-bin/Elements/elInfo.pl?element=103';nist.textContent='NIST';source.append(nist);}
+    detail.append(source);
+    if(e.number>=104)detail.append(text('p','Superheavy-element configurations may be calculated or predicted; source qualifiers are retained.','element-data-note'));
+    previewObserver=new ResizeObserver(()=>drawAtom(preview,e));previewObserver.observe(preview);drawAtom(preview,e);
+    $('selectedOut').textContent=e.symbol;$('categoryOut').textContent=e.category;
+  }
+  function filter(){
+    const q=$('search').value.trim().toLowerCase(),f=filterControl.value;
+    const exact=q?data.filter(e=>[e.symbol.toLowerCase(),e.name.toLowerCase(),String(e.number)].includes(q)):[];
+    let n=0;
+    data.forEach((e,i)=>{
+      const metal=!['nonmetal','metalloid','halogen','noble gas'].includes(e.category);
+      const matches=exact.length?exact.includes(e):(e.name+' '+e.symbol+' '+e.number+' '+(aliases[e.symbol]||'')).toLowerCase().includes(q);
+      const show=matches&&(f==='all'||(f==='metal'?metal:e.category===f));
+      tiles[i].hidden=!show;if(show)n++;
+    });
+    $('visibleOut').textContent=n;
+    status.textContent=n?n+' of '+data.length+' elements match. Select an element to inspect its properties.':'No matches. Try a name, symbol or atomic number, or reset the category filter.';
+  }
+  $('search').oninput=filter;filterControl.onchange=filter;
+  $('reset').onclick=()=>{$('search').value='';filterControl.value='all';filter();};
+  $('checkChallenge').onclick=()=>{const ok=selected?.symbol==='Ar',f=$('challengeFeedback');f.textContent=ok?'Correct—argon is the period 3 noble gas.':'Find group 18 in period 3.';f.className='challenge__feedback '+(ok?'is-success':'is-error');};
+  filter();select(data[5],tiles[5]);
+  Lab.note('All 118 elements are included. Detached rows contain elements 57–71 and 89–103. Shell diagrams count every electron in a neutral atom; rings are a teaching model, not literal trajectories. PubChem mass values may represent a particular isotope for radioactive elements, rather than a standard atomic weight.');
+})();
